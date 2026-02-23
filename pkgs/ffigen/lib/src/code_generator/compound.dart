@@ -5,6 +5,7 @@
 import '../code_generator.dart';
 import '../config_provider.dart';
 import '../context.dart';
+import '../header_parser/sub_parsers/api_availability.dart';
 import '../visitor/ast.dart';
 
 import 'binding_string.dart';
@@ -56,6 +57,15 @@ abstract class Compound extends BindingType with HasLocalScope {
           '${_getInlineArrayTypeString(type.child, w)}>';
     }
     return type.getCType(context);
+  }
+
+  @override
+  ApiAvailability get computeAvailability {
+    var avail = ApiAvailability.alwaysAvailable;
+    for (final member in members) {
+      avail = avail.merge(member.type.computeAvailability);
+    }
+    return avail;
   }
 
   @override
