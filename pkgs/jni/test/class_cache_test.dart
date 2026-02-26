@@ -94,9 +94,7 @@ void run({required TestRunnerCallback testRunner}) {
     // Both are the same cached instance
     expect(identical(c1, c2), isTrue);
     // Same underlying JNI object
-    expect(
-        Jni.env.IsSameObject(
-            c1.reference.pointer, c2.reference.pointer),
+    expect(Jni.env.IsSameObject(c1.reference.pointer, c2.reference.pointer),
         isTrue);
   });
 

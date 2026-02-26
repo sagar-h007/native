@@ -8,6 +8,15 @@
 - Changed the behavior of `JObject.releasedBy`. It now does not throw a
   `DoubleReleaseError` if the object was manually released before the end of
   arena.
+- Added an isolate-local LRU cache for `JClass` global references, bounded by a
+  configurable capacity (default 256 entries).
+- Added `Jni.getCachedClass(String name)` which returns a cached `JClass`
+  instance, minimizing redundant JNI `FindClass` calls and `GlobalRef`
+  allocations.
+- Added `JClass.forNameCached(String name)` factory which delegates to
+  `Jni.getCachedClass`.
+- Added `Jni.setClassCacheSize(int size)` to configure the cache capacity at
+  runtime. Reducing the capacity evicts least-recently-used entries immediately.
 
 ## 0.15.2
 

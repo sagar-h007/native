@@ -7,6 +7,9 @@
   `bool`.
 - Kotlin suspend functions with no result (a return type of `Unit`) now return
   `Future<void>` in Dart instead of `Future<JObject>`.
+- Generated bindings now use `JClass.forNameCached` instead of `JClass.forName`
+  for class lookups, reducing redundant `FindClass` JNI calls via the new
+  isolate-local LRU cache in `package:jni`.
 
 ## 0.15.0
 
