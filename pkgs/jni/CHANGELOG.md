@@ -1,10 +1,17 @@
 ## 0.15.3-wip
 
 - Fixed JNI wrapper generator to properly handle null checks for method and field
-  ID getters (`GetMethodID`, `GetFieldID`, `GetStaticMethodID`, 
-  `GetStaticFieldID`).
-- Added support for JNI functions that accept NULL parameters per specification
-  (e.g., `PopLocalFrame`).
+  ID getters (`GetMethodID`, `GetFieldID`, `GetStaticMethodID`,
+  `GetStaticFieldID`). Passing a null JNI parameter to these functions now
+  throws a `NullPointerException` from the Java side instead of silently
+  returning an invalid result.
+- Fixed C-layer null-check handling: null JNI parameters now propagate a real
+  `java.lang.RuntimeException` global reference through the `.exception` field
+  so that Dart correctly detects and throws on null input rather than treating
+  it as success.
+- Added support for JNI functions that accept `NULL` parameters per the JNI
+  specification (e.g., `PopLocalFrame`). These functions are excluded from the
+  null-check guard in the generated C extensions.
 - Added `Jni.captureStackTraceOnRelease` which defaults to `false`. When this is
   set, the stack traces of the release points will be stored for `JObject`s to
   help debug `DoubleReleaseError` and `UseAfterReleaseError`s. This includes the
